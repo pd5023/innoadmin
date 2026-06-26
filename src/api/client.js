@@ -1,4 +1,4 @@
-﻿// Dev: Vite proxy handles /admin/api → localhost:3000
+// Dev: Vite proxy handles /admin/api → localhost:3000
 // Prod: set VITE_API_URL=https://your-innowebsrv.onrender.com in Render env vars
 const BASE = (import.meta.env.VITE_API_URL ?? "") + "/admin/api";
 

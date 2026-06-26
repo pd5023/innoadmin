@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import Table from "../components/Table";
 import Modal from "../components/Modal";

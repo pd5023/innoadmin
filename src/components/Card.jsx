@@ -1,4 +1,4 @@
-﻿export default function Card({ title, value, sub, color = "blue" }) {
+export default function Card({ title, value, sub, color = "blue" }) {
   const colors = {
     blue:  "bg-blue-50  border-blue-200  text-blue-700",
     teal:  "bg-teal-50  border-teal-200  text-teal-700",

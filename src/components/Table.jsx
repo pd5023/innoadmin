@@ -1,4 +1,4 @@
-﻿export default function Table({ cols, rows, onRow }) {
+export default function Table({ cols, rows, onRow }) {
   if (!rows?.length) return <p className="text-gray-400 text-sm py-4">No records found.</p>;
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200">
