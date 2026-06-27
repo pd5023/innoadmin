@@ -1,21 +1,23 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../auth";
 
 const nav = [
-  { to: "/",           icon: "⊞",  label: "Dashboard"  },
-  { to: "/tickets",    icon: "🎫", label: "Tickets"     },
-  { to: "/equipment",  icon: "🔧", label: "Equipment"   },
-  { to: "/clients",    icon: "🏥", label: "Clients"     },
-  { to: "/contacts",   icon: "👤", label: "Engineers"   },
-  { to: "/parts",      icon: "📦", label: "Parts"       },
-  { to: "/reports",    icon: "📄", label: "Reports"     },
+  { to: "/",          icon: "⊞",  label: "Dashboard" },
+  { to: "/tickets",   icon: "🎫", label: "Tickets"    },
+  { to: "/equipment", icon: "🔧", label: "Equipment"  },
+  { to: "/clients",   icon: "🏥", label: "Clients"    },
+  { to: "/contacts",  icon: "👤", label: "Engineers"  },
+  { to: "/parts",     icon: "📦", label: "Parts"      },
+  { to: "/reports",   icon: "📄", label: "Reports"    },
 ];
 
 export default function Layout() {
   const [open, setOpen] = useState(true);
+  const { user, logout } = useAuth();
+
   return (
     <div className="flex h-screen bg-gray-100 font-sans">
-      {/* Sidebar */}
       <aside className={`${open ? "w-52" : "w-14"} bg-blue-700 text-white flex flex-col transition-all duration-200`}>
         <div className="flex items-center justify-between px-3 py-4 bg-blue-800">
           {open && <span className="font-bold text-lg tracking-wide">InnoAdmin</span>}
@@ -40,14 +42,18 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        {open && (
-          <div className="px-3 py-3 text-blue-300 text-xs border-t border-blue-600">
-            InnoWebSrv @ localhost:3000
-          </div>
-        )}
+        <div className="border-t border-blue-600 p-3">
+          {open && <p className="text-blue-300 text-xs mb-2 truncate">{user?.name}</p>}
+          <button
+            onClick={logout}
+            className="flex items-center gap-2 text-blue-200 hover:text-white text-sm w-full"
+          >
+            <span className="w-5 text-center">↩</span>
+            {open && <span>Sign out</span>}
+          </button>
+        </div>
       </aside>
 
-      {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white shadow-sm px-6 py-3 flex items-center justify-between">
           <h1 className="text-gray-700 font-medium text-sm">InnoSpecs Admin</h1>
