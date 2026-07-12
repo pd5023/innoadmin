@@ -21,12 +21,15 @@ export default function Contacts() {
     setForm(null); load();
   };
 
+  const ROLES = ['admin', 'staff', 'client'];
+
   const cols = [
     { key:"cnt_id",    label:"ID" },
     { key:"name",      label:"Name" },
     { key:"username",  label:"Username" },
     { key:"clt_name",  label:"Client" },
     { key:"zone_name", label:"Zone" },
+    { key:"cnt_role",  label:"Role" },
     { key:"email",     label:"Email" },
     { key:"is_active", label:"Active", render: r => r.is_active ? "✓" : "—" },
   ];
@@ -40,7 +43,7 @@ export default function Contacts() {
             <option value="">All clients</option>
             {clients.map(c => <option key={c.clt_id} value={c.clt_id}>{c.clt_name}</option>)}
           </select>
-          <button onClick={() => setForm({ name:"", username:"", email:"", phone:"", mobile:"", clt_id:"", cat_id:1, zone_id:1, password:"Password1" })}
+          <button onClick={() => setForm({ name:"", username:"", email:"", phone:"", mobile:"", clt_id:"", cat_id:1, zone_id:1, cnt_role:"staff", password:"Password1" })}
             className="px-4 py-2 text-sm bg-blue-700 text-white rounded hover:bg-blue-800">+ New engineer</button>
         </div>
       </div>
@@ -55,6 +58,24 @@ export default function Contacts() {
                 <input value={form[k]||""} onChange={e => setForm({...form,[k]:e.target.value})} className="w-full border rounded px-3 py-2 text-sm" />
               </div>
             ))}
+            <div className="col-span-2">
+              <label className="block text-xs font-medium text-gray-600 mb-1">Role(s) — comma-separated (admin, staff, client)</label>
+              <div className="flex gap-3">
+                {ROLES.map(role => (
+                  <label key={role} className="flex items-center gap-1 text-sm cursor-pointer">
+                    <input type="checkbox"
+                      checked={(form.cnt_role||'').split(',').map(s=>s.trim()).includes(role)}
+                      onChange={e => {
+                        const current = (form.cnt_role||'').split(',').map(s=>s.trim()).filter(Boolean);
+                        const updated = e.target.checked ? [...new Set([...current, role])] : current.filter(r=>r!==role);
+                        setForm({...form, cnt_role: updated.join(',')});
+                      }}
+                    />
+                    {role}
+                  </label>
+                ))}
+              </div>
+            </div>
             {!form.cnt_id && (
               <div className="col-span-2">
                 <label className="block text-xs font-medium text-gray-600 mb-1">Initial password</label>
