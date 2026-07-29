@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import Table from "../components/Table";
 import Modal from "../components/Modal";
+import PasswordField from "../components/PasswordField";
 
 const ROLES = ["Admin", "Contracts", "Manager", "Supervisor", "Employee"];
 
@@ -61,7 +62,7 @@ export default function Employees() {
             {!form.empl_id && (
               <div className="col-span-2">
                 <label className="block text-xs font-medium text-gray-600 mb-1">Initial password</label>
-                <input type="password" value={form.password || ""} onChange={e => setForm({ ...form, password: e.target.value })} className="w-full border rounded px-3 py-2 text-sm" />
+                <PasswordField value={form.password || ""} onChange={e => setForm({ ...form, password: e.target.value })} className="w-full border rounded px-3 py-2 text-sm" />
               </div>
             )}
           </div>
@@ -77,7 +78,7 @@ export default function Employees() {
 
       {pwForm && (
         <Modal title={`Reset password — ${pwForm.empl_name}`} onClose={() => setPwForm(null)}>
-          <input type="password" value={newPw} onChange={e => setNewPw(e.target.value)} placeholder="New password" className="w-full border rounded px-3 py-2 text-sm" />
+          <PasswordField value={newPw} onChange={e => setNewPw(e.target.value)} placeholder="New password" className="w-full border rounded px-3 py-2 text-sm" />
           <div className="flex justify-end gap-2 mt-4">
             <button onClick={() => setPwForm(null)} className="px-4 py-2 text-sm border rounded text-gray-600">Cancel</button>
             <button onClick={async () => { await api.resetPassword(pwForm.empl_id, newPw); setPwForm(null); setNewPw(""); }} className="px-4 py-2 text-sm bg-blue-700 text-white rounded">Reset</button>
