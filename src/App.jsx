@@ -7,7 +7,7 @@ import Dashboard   from "./pages/Dashboard";
 import Tickets     from "./pages/Tickets";
 import Equipment   from "./pages/Equipment";
 import Clients     from "./pages/Clients";
-import Contacts    from "./pages/Contacts";
+import Employees   from "./pages/Employees";
 import Parts       from "./pages/Parts";
 import Reports     from "./pages/Reports";
 
@@ -21,7 +21,7 @@ export default function App() {
         <Route path="tickets"   element={<Tickets />}   />
         <Route path="equipment" element={<Equipment />} />
         <Route path="clients"   element={<Clients />}   />
-        <Route path="contacts"  element={<Contacts />}  />
+        <Route path="employees" element={<Employees />} />
         <Route path="parts"     element={<Parts />}     />
         <Route path="reports"   element={<Reports />}   />
       </Route>

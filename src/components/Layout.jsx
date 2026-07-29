@@ -7,7 +7,7 @@ const nav = [
   { to: "/tickets",   icon: "🎫", label: "Tickets"    },
   { to: "/equipment", icon: "🔧", label: "Equipment"  },
   { to: "/clients",   icon: "🏥", label: "Clients"    },
-  { to: "/contacts",  icon: "👤", label: "Engineers"  },
+  { to: "/employees", icon: "👤", label: "Employees"  },
   { to: "/parts",     icon: "📦", label: "Parts"      },
   { to: "/reports",   icon: "📄", label: "Reports"    },
 ];
@@ -20,7 +20,7 @@ export default function Layout() {
     <div className="flex h-screen bg-gray-100 font-sans">
       <aside className={`${open ? "w-52" : "w-14"} bg-blue-700 text-white flex flex-col transition-all duration-200`}>
         <div className="flex items-center justify-between px-3 py-4 bg-blue-800">
-          {open && <span className="font-bold text-lg tracking-wide">InnoAdmin</span>}
+          {open && <span className="font-bold text-lg tracking-wide">{user?.name?.split(" ")[0]}</span>}
           <button onClick={() => setOpen(!open)} className="text-white/70 hover:text-white text-xl leading-none">
             {open ? "‹" : "›"}
           </button>

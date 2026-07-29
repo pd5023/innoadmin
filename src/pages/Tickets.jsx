@@ -15,8 +15,8 @@ export default function Tickets() {
   const [rows, setRows] = useState([]);
   const [filter, setFilter] = useState({ status: "" });
   const [selected, setSelected] = useState(null);
-  const [contacts, setContacts] = useState([]);
-  const [modal, setModal] = useState(null); // "assign" | "void" | "notify"
+  const [employees, setEmployees] = useState([]);
+  const [modal, setModal] = useState(null); // "assign" | "void"
   const [input, setInput] = useState("");
 
   const load = () => {
@@ -26,7 +26,7 @@ export default function Tickets() {
   };
 
   useEffect(() => { load(); }, [filter]);
-  useEffect(() => { api.contacts().then(setContacts).catch(console.error); }, []);
+  useEffect(() => { api.employees().then(setEmployees).catch(console.error); }, []);
 
   const cols = [
     { key: "tkt_id",       label: "ID"        },
@@ -40,8 +40,7 @@ export default function Tickets() {
 
   const doAction = async () => {
     if (modal === "assign")  { await api.assignTicket(selected.tkt_id, input); }
-    if (modal === "void")    { await api.voidTicket(selected.tkt_id, input); }
-    if (modal === "notify")  { await api.notifyTicket(selected.tkt_id, input, ""); }
+    if (modal === "void")    { await api.voidTicket(selected.tkt_id); }
     setModal(null); setInput(""); load();
   };
 
@@ -65,22 +64,20 @@ export default function Tickets() {
         <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200 flex items-center gap-3 flex-wrap">
           <span className="text-sm font-medium text-blue-800">#{selected.tkt_id} — {selected.clt_name}</span>
           <button onClick={() => setModal("assign")} className="px-3 py-1 text-xs bg-blue-700 text-white rounded hover:bg-blue-800">Assign</button>
-          <button onClick={() => setModal("notify")} className="px-3 py-1 text-xs bg-teal-600 text-white rounded hover:bg-teal-700">Notify engineer</button>
-          {selected.tkt_status === 0 && <button onClick={() => setModal("void")} className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">Void</button>}
+          {selected.tkt_status !== 5 && <button onClick={() => setModal("void")} className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">Void</button>}
           <button onClick={() => setSelected(null)} className="ml-auto text-gray-400 hover:text-gray-600 text-sm">✕</button>
         </div>
       )}
 
       {modal && (
-        <Modal title={modal === "assign" ? "Assign Ticket" : modal === "void" ? "Void Ticket" : "Send Notification"} onClose={() => setModal(null)}>
-          {modal === "assign" || modal === "notify" ? (
+        <Modal title={modal === "assign" ? "Assign Ticket" : "Void Ticket"} onClose={() => setModal(null)}>
+          {modal === "assign" ? (
             <select value={input} onChange={e => setInput(e.target.value)} className="w-full border rounded px-3 py-2 text-sm">
-              <option value="">— select engineer —</option>
-              {contacts.map(c => <option key={c.cnt_id} value={c.cnt_id}>{c.name}</option>)}
+              <option value="">— select employee —</option>
+              {employees.map(e => <option key={e.empl_id} value={e.empl_id}>{e.empl_name}</option>)}
             </select>
           ) : (
-            <input value={input} onChange={e => setInput(e.target.value)} placeholder="Reason for voiding..."
-              className="w-full border rounded px-3 py-2 text-sm" />
+            <p className="text-sm text-gray-600">Void ticket #{selected?.tkt_id}? This cannot be undone.</p>
           )}
           <div className="flex justify-end gap-2 mt-4">
             <button onClick={() => setModal(null)} className="px-4 py-2 text-sm border rounded text-gray-600 hover:bg-gray-50">Cancel</button>
