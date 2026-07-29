@@ -4,7 +4,7 @@ import Table from "../components/Table";
 import Modal from "../components/Modal";
 
 const empty = {
-  clt_name: "", clt_phone: "", clt_800: "", clt_busHrs: "", clt_siteurl: "",
+  clt_name: "", clt_phone: "", clt_800: "", clt_busHrs: "Mon-Sun 6:00-23:00", clt_siteurl: "",
   clt_address: { Street: "", City: "", State: "", Zip: "", Country: "" },
   clt_zone: 1, clt_subId: 1, pref_hrtick: 15,
   pref_allowSRbill: false, pref_flexSRtime: false, pref_reqGeoLoc: false, pref_reqSign: true,
@@ -96,7 +96,11 @@ export default function Clients() {
           <div className="grid grid-cols-2 gap-3 mb-3">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Time rounding (minutes)</label>
-              <input type="number" value={form.pref_hrtick||15} onChange={e => setForm({...form, pref_hrtick:Number(e.target.value)})} className="w-full border rounded px-3 py-2 text-sm" />
+              <select value={form.pref_hrtick ?? 15} onChange={e => setForm({...form, pref_hrtick:Number(e.target.value)})} className="w-full border rounded px-3 py-2 text-sm">
+                <option value={0}>00</option>
+                <option value={15}>15</option>
+                <option value={30}>30</option>
+              </select>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-3">
