@@ -8,6 +8,8 @@ import Offices     from "./pages/Offices";
 import Tickets     from "./pages/Tickets";
 import Equipment   from "./pages/Equipment";
 import Clients     from "./pages/Clients";
+import ClientDetail from "./pages/ClientDetail";
+import EquipmentDetail from "./pages/EquipmentDetail";
 import Employees   from "./pages/Employees";
 import AuthGrid    from "./pages/AuthGrid";
 import Parts       from "./pages/Parts";
@@ -24,6 +26,8 @@ export default function App() {
         <Route path="tickets"   element={<Tickets />}   />
         <Route path="equipment" element={<Equipment />} />
         <Route path="clients"   element={<Clients />}   />
+        <Route path="clients/:id" element={<ClientDetail />} />
+        <Route path="clients/:id/equipment/:eqpId" element={<EquipmentDetail />} />
         <Route path="employees" element={<Employees />} />
         <Route path="auth-grid" element={<AuthGrid />} />
         <Route path="parts"     element={<Parts />}     />
