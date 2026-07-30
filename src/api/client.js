@@ -54,4 +54,8 @@ export const api = {
   report:    (id)                     => req("GET",    `/reports/${id}`),
   parts:     (q)                      => req("GET",    `/parts?${new URLSearchParams(q || {})}`),
   updatePartStatus: (id, d)           => req("PUT",    `/parts/${id}/status`, d),
+  emplRoles:   ()                     => req("GET",    "/empl-roles"),
+  roleAuthTiers: ()                   => req("GET",    "/role-auth-tiers"),
+  emplRoleAuthMap: ()                 => req("GET",    "/empl-role-auth-map"),
+  setEmplRoleAuth: (roleId, auth_id)  => req("PUT",    `/empl-role-auth-map/${roleId}`, { auth_id }),
 };

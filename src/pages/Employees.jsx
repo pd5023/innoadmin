@@ -4,11 +4,10 @@ import Table from "../components/Table";
 import Modal from "../components/Modal";
 import PasswordField from "../components/PasswordField";
 
-const ROLES = ["Admin", "Contracts", "Manager", "Supervisor", "Employee"];
-
 export default function Employees() {
   const [rows, setRows] = useState([]);
   const [modalities, setModalities] = useState([]);
+  const [titles, setTitles] = useState([]);
   const [form, setForm] = useState(null);
   const [pwForm, setPwForm] = useState(null);
   const [newPw, setNewPw] = useState("");
@@ -16,6 +15,7 @@ export default function Employees() {
   const load = () => api.employees().then(setRows);
   useEffect(() => { load(); }, []);
   useEffect(() => { api.modalities().then(setModalities); }, []);
+  useEffect(() => { api.emplRoles().then(setTitles); }, []);
 
   const selectedModals = (form?.empl_modals || "").split(",").filter(Boolean).map(Number);
   const toggleModal = (modId) => {
@@ -35,7 +35,8 @@ export default function Employees() {
     { key: "empl_id",       label: "ID" },
     { key: "empl_name",     label: "Name" },
     { key: "empl_username", label: "Username" },
-    { key: "empl_role",     label: "Role" },
+    { key: "title_name",    label: "Title" },
+    { key: "tier_name",     label: "Tier", render: r => r.tier_name || "—" },
     { key: "empl_email",    label: "Email" },
     { key: "empl_phone",    label: "Phone" },
     { key: "empl_isActive", label: "Active", render: r => r.empl_isActive ? "✓" : "—" },
@@ -45,7 +46,7 @@ export default function Employees() {
     <div>
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-semibold text-gray-800">Employees</h2>
-        <button onClick={() => setForm({ empl_name: "", empl_username: "", empl_email: "", empl_phone: "", empl_role: "Employee", empl_isActive: true, password: "Password1" })}
+        <button onClick={() => setForm({ empl_name: "", empl_username: "", empl_email: "", empl_phone: "", empl_titleId: "", empl_isActive: true, password: "Password1" })}
           className="px-4 py-2 text-sm bg-blue-700 text-white rounded hover:bg-blue-800">+ New employee</button>
       </div>
       <Table cols={cols} rows={rows} onRow={r => setForm({ ...r })} />
@@ -60,10 +61,12 @@ export default function Employees() {
               </div>
             ))}
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">Role</label>
-              <select value={form.empl_role || "Employee"} onChange={e => setForm({ ...form, empl_role: e.target.value })} className="w-full border rounded px-3 py-2 text-sm">
-                {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
+              <label className="block text-xs font-medium text-gray-600 mb-1">Title</label>
+              <select value={form.empl_titleId || ""} onChange={e => setForm({ ...form, empl_titleId: Number(e.target.value) })} className="w-full border rounded px-3 py-2 text-sm">
+                <option value="" disabled>— select title —</option>
+                {titles.map(t => <option key={t.role_id} value={t.role_id}>{t.role_name}</option>)}
               </select>
+              <p className="text-xs text-gray-400 mt-1">The permission tier for each title is set on the Auth Grid screen.</p>
             </div>
             <div className="col-span-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">Modalities</label>
