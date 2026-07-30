@@ -162,8 +162,38 @@ export default function Offices() {
         </Modal>
       )}
 
-      {subForm && (
+      {subForm && (() => {
+        const sameAsMainTakenByOther = subOffices.some(s => s.sub_pref_sameAsMain && s.sub_id !== subForm.sub_id);
+        const toggleSameAsMain = (checked) => {
+          if (checked && mainOffice) {
+            setSubForm({
+              ...subForm,
+              sub_pref_sameAsMain: true,
+              sub_address: { ...(mainOffice.address || {}) },
+              sub_phone: mainOffice.main_phone,
+              sub_800: mainOffice.main_800,
+              sub_busHrs: mainOffice.busHrs,
+              sub_siteurl: mainOffice.siteurl,
+              sub_zone: mainOffice.zone,
+            });
+          } else {
+            setSubForm({ ...subForm, sub_pref_sameAsMain: false });
+          }
+        };
+        return (
         <Modal title={subForm.sub_id ? "Edit Office" : "New Office"} onClose={() => setSubForm(null)}>
+          <label className={`flex items-center gap-2 text-sm mb-3 px-3 py-2 rounded border ${sameAsMainTakenByOther ? "bg-gray-50 text-gray-400 border-gray-200" : "bg-blue-50 text-blue-800 border-blue-200"}`}>
+            <input
+              type="checkbox"
+              checked={!!subForm.sub_pref_sameAsMain}
+              disabled={sameAsMainTakenByOther}
+              onChange={e => toggleSameAsMain(e.target.checked)}
+            />
+            Same as Main Office (fills address, phone, hours, and zone from Main Office)
+          </label>
+          {sameAsMainTakenByOther && (
+            <p className="text-xs text-gray-400 -mt-2 mb-3">Already used by another sub-office — only one can share Main Office's values.</p>
+          )}
           <div className="grid grid-cols-2 gap-3 mb-3">
             <div className="col-span-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">Name</label>
@@ -212,7 +242,8 @@ export default function Offices() {
             </div>
           </div>
         </Modal>
-      )}
+        );
+      })()}
     </div>
   );
 }
