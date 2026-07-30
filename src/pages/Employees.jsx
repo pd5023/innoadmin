@@ -8,12 +8,22 @@ const ROLES = ["Admin", "Contracts", "Manager", "Supervisor", "Employee"];
 
 export default function Employees() {
   const [rows, setRows] = useState([]);
+  const [modalities, setModalities] = useState([]);
   const [form, setForm] = useState(null);
   const [pwForm, setPwForm] = useState(null);
   const [newPw, setNewPw] = useState("");
 
   const load = () => api.employees().then(setRows);
   useEffect(() => { load(); }, []);
+  useEffect(() => { api.modalities().then(setModalities); }, []);
+
+  const selectedModals = (form?.empl_modals || "").split(",").filter(Boolean).map(Number);
+  const toggleModal = (modId) => {
+    const updated = selectedModals.includes(modId)
+      ? selectedModals.filter(id => id !== modId)
+      : [...selectedModals, modId];
+    setForm({ ...form, empl_modals: updated.join(",") });
+  };
 
   const save = async () => {
     if (form.empl_id) await api.updateEmployee(form.empl_id, form);
@@ -54,6 +64,18 @@ export default function Employees() {
               <select value={form.empl_role || "Employee"} onChange={e => setForm({ ...form, empl_role: e.target.value })} className="w-full border rounded px-3 py-2 text-sm">
                 {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
               </select>
+            </div>
+            <div className="col-span-2">
+              <label className="block text-xs font-medium text-gray-600 mb-1">Modalities</label>
+              <div className="flex flex-wrap gap-3 border rounded px-3 py-2">
+                {modalities.map(m => (
+                  <label key={m.mod_id} className="flex items-center gap-1 text-sm cursor-pointer">
+                    <input type="checkbox" checked={selectedModals.includes(m.mod_id)} onChange={() => toggleModal(m.mod_id)} />
+                    {m.mod_name}
+                  </label>
+                ))}
+                {modalities.length === 0 && <span className="text-sm text-gray-400">No modalities defined yet.</span>}
+              </div>
             </div>
             <div className="col-span-2 flex items-center gap-2">
               <input type="checkbox" id="empl_isActive" checked={form.empl_isActive !== false} onChange={e => setForm({ ...form, empl_isActive: e.target.checked })} />
