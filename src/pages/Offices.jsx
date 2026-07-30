@@ -74,6 +74,12 @@ export default function Offices() {
           {subOffices.filter(s => s.sub_zone === z.zone_id).length === 0 && (
             <p className="border-t px-3 py-2 text-sm text-gray-400 italic">No sub-offices in this zone yet.</p>
           )}
+          <button
+            onClick={() => setSubForm({ ...emptySubOffice, sub_address: { ...emptySubOffice.sub_address }, sub_zone: z.zone_id })}
+            className="w-full text-left border-t px-3 py-2 text-sm text-blue-700 hover:bg-blue-50 transition-colors"
+          >
+            + Add office to {z.zone_name}
+          </button>
         </div>
       ))}
       {zones.length === 0 && <p className="text-sm text-gray-400">No zones yet — add one to get started.</p>}
