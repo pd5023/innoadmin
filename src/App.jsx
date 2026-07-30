@@ -4,6 +4,7 @@ import Layout      from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
 import Login       from "./pages/Login";
 import Dashboard   from "./pages/Dashboard";
+import Offices     from "./pages/Offices";
 import Tickets     from "./pages/Tickets";
 import Equipment   from "./pages/Equipment";
 import Clients     from "./pages/Clients";
@@ -18,6 +19,7 @@ export default function App() {
       <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
       <Route path="/" element={<RequireAuth><Layout /></RequireAuth>}>
         <Route index          element={<Dashboard />} />
+        <Route path="offices"   element={<Offices />}   />
         <Route path="tickets"   element={<Tickets />}   />
         <Route path="equipment" element={<Equipment />} />
         <Route path="clients"   element={<Clients />}   />
