@@ -16,7 +16,7 @@ export default function Reports() {
   const open = async (r) => {
     setLoading(true);
     const d = await api.report(r.sr_id);
-    setDetail(d);
+    setDetail({ ...r, ...d });
     setLoading(false);
   };
 
@@ -24,11 +24,10 @@ export default function Reports() {
     { key:"sr_id",        label:"ID"        },
     { key:"clt_name",     label:"Client"    },
     { key:"eqp_alias",    label:"Equipment" },
-    { key:"engineer_name",label:"Engineer"  },
+    { key:"tkt_shrtDesc", label:"Issue"     },
     { key:"sr_date",      label:"Date",      render: r => r.sr_date?.slice(0,10) },
-    { key:"tkt_shrt_desc",label:"Issue"     },
-    { key:"sr_complete",  label:"Complete",  render: r => r.sr_complete ? "✓" : "—" },
-    { key:"sr_sign_name", label:"Signed by" },
+    { key:"status_name",  label:"Status"    },
+    { key:"sr_signName",  label:"Signed by" },
   ];
 
   return (
@@ -45,13 +44,11 @@ export default function Reports() {
         <Modal title={`Report #${detail?.sr_id ?? "..."}`} onClose={() => setDetail(null)}>
           {loading ? <p className="text-sm text-gray-400 animate-pulse">Loading...</p> : (
             <div className="text-sm space-y-2">
-              <p><span className="font-medium">Engineer:</span> {detail.cnt_id}</p>
               <p><span className="font-medium">Date:</span> {detail.sr_date?.slice(0,10)}</p>
-              <p><span className="font-medium">Signed by:</span> {detail.sr_sign_name || "—"}</p>
-              <p><span className="font-medium">PO:</span> {detail.sr_po || "—"}</p>
-              <p><span className="font-medium">Complete:</span> {detail.sr_complete ? "Yes" : "No"}</p>
-              <div className="bg-gray-50 rounded p-3 mt-2 whitespace-pre-wrap text-gray-700 text-xs">{detail.sr_repairs || "No repair notes"}</div>
-              {detail.hours?.length > 0 && <p className="font-medium mt-2">Hours: {detail.hours.length} entr{detail.hours.length===1?"y":"ies"}</p>}
+              <p><span className="font-medium">Status:</span> {detail.status_name || detail.sr_status}</p>
+              <p><span className="font-medium">Signed by:</span> {detail.sr_signName || "—"}</p>
+              <div className="bg-gray-50 rounded p-3 mt-2 whitespace-pre-wrap text-gray-700 text-xs">{detail.sr_desc || "No repair notes"}</div>
+              {detail.sr_hrs && <p className="font-medium mt-2">Hours: Start {detail.sr_hrs.Start} · Out {detail.sr_hrs.Out} · In {detail.sr_hrs.In} · End {detail.sr_hrs.End}</p>}
               {detail.parts?.length > 0 && <p className="font-medium">Parts: {detail.parts.length} item{detail.parts.length===1?"":"s"}</p>}
             </div>
           )}

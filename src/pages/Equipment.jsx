@@ -36,7 +36,7 @@ export default function Equipment() {
     { key:"dept_name",  label:"Department" },
     { key:"modal_name", label:"Modality"   },
     { key:"make_name",  label:"Make"       },
-    { key:"is_active",  label:"Active", render: r => r.is_active ? "✓" : "—" },
+    { key:"eqp_isActive",  label:"Active", render: r => r.eqp_isActive ? "✓" : "—" },
   ];
 
   return (
@@ -48,7 +48,7 @@ export default function Equipment() {
             <option value="">All clients</option>
             {clients.map(c => <option key={c.clt_id} value={c.clt_id}>{c.clt_name}</option>)}
           </select>
-          <button onClick={() => setForm({ eqp_alias:"", eqp_model:"", eqp_serial:"", eqp_barcode:"", clt_id:"", dept_id:"", modal_id:"", make_id:"", is_active:true })}
+          <button onClick={() => setForm({ eqp_alias:"", eqp_model:"", eqp_serial:"", eqp_barcode:"", clt_id:"", dept_id:"", modal_id:"", make_id:"", eqp_isActive:true })}
             className="px-4 py-2 text-sm bg-blue-700 text-white rounded hover:bg-blue-800">+ New equipment</button>
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function Equipment() {
               </div>
             ))}
             <label className="flex items-center gap-2 text-sm col-span-2">
-              <input type="checkbox" checked={!!form.is_active} onChange={e => setForm({...form, is_active: e.target.checked})} />
+              <input type="checkbox" checked={!!form.eqp_isActive} onChange={e => setForm({...form, eqp_isActive: e.target.checked})} />
               Active
             </label>
           </div>

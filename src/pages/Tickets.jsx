@@ -6,9 +6,11 @@ import StatusBadge from "../components/Badge";
 
 const STATUSES = [
   { value: "", label: "All" },
-  { value: 0,  label: "Open" },
-  { value: 1,  label: "Closed" },
-  { value: 9,  label: "Voided" },
+  { value: 1,  label: "Received" },
+  { value: 2,  label: "Assigned" },
+  { value: 3,  label: "In-process" },
+  { value: 4,  label: "Completed" },
+  { value: 5,  label: "Cancelled" },
 ];
 
 export default function Tickets() {
@@ -32,7 +34,7 @@ export default function Tickets() {
     { key: "tkt_id",       label: "ID"        },
     { key: "clt_name",     label: "Client"    },
     { key: "eqp_alias",    label: "Equipment" },
-    { key: "tkt_shrt_desc",label: "Issue"     },
+    { key: "tkt_shrtDesc", label: "Issue"     },
     { key: "assigned_name",label: "Assigned"  },
     { key: "tkt_date",     label: "Date",     render: r => r.tkt_date?.slice(0,10) },
     { key: "tkt_status",   label: "Status",   render: r => <StatusBadge status={r.tkt_status} /> },
@@ -64,20 +66,20 @@ export default function Tickets() {
         <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200 flex items-center gap-3 flex-wrap">
           <span className="text-sm font-medium text-blue-800">#{selected.tkt_id} — {selected.clt_name}</span>
           <button onClick={() => setModal("assign")} className="px-3 py-1 text-xs bg-blue-700 text-white rounded hover:bg-blue-800">Assign</button>
-          {selected.tkt_status !== 5 && <button onClick={() => setModal("void")} className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">Void</button>}
+          {selected.tkt_status !== 5 && <button onClick={() => setModal("void")} className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">Cancel</button>}
           <button onClick={() => setSelected(null)} className="ml-auto text-gray-400 hover:text-gray-600 text-sm">✕</button>
         </div>
       )}
 
       {modal && (
-        <Modal title={modal === "assign" ? "Assign Ticket" : "Void Ticket"} onClose={() => setModal(null)}>
+        <Modal title={modal === "assign" ? "Assign Ticket" : "Cancel Ticket"} onClose={() => setModal(null)}>
           {modal === "assign" ? (
             <select value={input} onChange={e => setInput(e.target.value)} className="w-full border rounded px-3 py-2 text-sm">
               <option value="">— select employee —</option>
               {employees.map(e => <option key={e.empl_id} value={e.empl_id}>{e.empl_name}</option>)}
             </select>
           ) : (
-            <p className="text-sm text-gray-600">Void ticket #{selected?.tkt_id}? This cannot be undone.</p>
+            <p className="text-sm text-gray-600">Cancel ticket #{selected?.tkt_id}? This cannot be undone.</p>
           )}
           <div className="flex justify-end gap-2 mt-4">
             <button onClick={() => setModal(null)} className="px-4 py-2 text-sm border rounded text-gray-600 hover:bg-gray-50">Cancel</button>

@@ -28,7 +28,7 @@ export default function Employees() {
     { key: "empl_role",     label: "Role" },
     { key: "empl_email",    label: "Email" },
     { key: "empl_phone",    label: "Phone" },
-    { key: "empl_isactive", label: "Active", render: r => r.empl_isactive ? "✓" : "—" },
+    { key: "empl_isActive", label: "Active", render: r => r.empl_isActive ? "✓" : "—" },
   ];
 
   return (
@@ -38,7 +38,7 @@ export default function Employees() {
         <button onClick={() => setForm({ empl_name: "", empl_username: "", empl_email: "", empl_phone: "", empl_role: "Employee", empl_isActive: true, password: "Password1" })}
           className="px-4 py-2 text-sm bg-blue-700 text-white rounded hover:bg-blue-800">+ New employee</button>
       </div>
-      <Table cols={cols} rows={rows} onRow={r => setForm({ ...r, empl_isActive: r.empl_isactive })} />
+      <Table cols={cols} rows={rows} onRow={r => setForm({ ...r })} />
 
       {form && (
         <Modal title={form.empl_id ? "Edit Employee" : "New Employee"} onClose={() => setForm(null)}>
